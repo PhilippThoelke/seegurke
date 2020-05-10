@@ -130,3 +130,6 @@ dmypy.json
 
 # Azure files
 .azure/
+
+# config file
+config.json

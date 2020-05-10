@@ -1,8 +1,20 @@
 from flask import Flask, render_template, session, request, redirect, url_for
+import secrets
+import json
+import os
 import games
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'MRmxbZxgpUWwWp6bH6jKpA'
+
+if os.path.exists('config.json'):
+	with open('config.json') as file:
+		config = json.load(file)
+else:
+	config = {'secret': secrets.token_urlsafe(16)}
+	with open('config.json', 'w') as file:
+		json.dump(config, file)
+
+app.secret_key = config['secret']
 
 gamerooms = {}
 
