@@ -14,13 +14,13 @@ class Qwirkle:
 			return 6
 		return max(key[1] for key in self.blocks.keys()) + 10
 
-	def test(self, arg):
-		print(arg)
-
 	def __getitem__(self, idx):
 		if idx in self.blocks:
 			return True
 		return False
+
+	def __setitem__(self, idx, val):
+		self.blocks[idx] = val
 
 	def __repr__(self):
 		return f'Qwirkle(title={self.title}, num_blocks={len(self.blocks)})'

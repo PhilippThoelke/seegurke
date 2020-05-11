@@ -42,5 +42,10 @@ def qwirkle():
 
 @app.route('/block-dropped', methods = ['POST'])
 def block_dropped():
-	print(request.form)
-	return 'Got something I guess'
+	x, y = int(request.form['x']), int(request.form['y'])
+	if 'gameroom' in session and session['gameroom'] in gamerooms:
+		gamerooms[session['gameroom']][x, y] = True
+		return 'Successful'
+	else:
+		print('ERROR: gameroom not found')
+		return 'Error: gameroom not found'

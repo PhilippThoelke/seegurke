@@ -15,7 +15,7 @@
 			function drop(ev) {
 				ev.preventDefault();
 				console.log(ev.target.attributes["x"])
-				$.post("block-dropped", {"coordinates": [ev.target.attributes["x"].value, ev.target.attributes["y"].value]}, function() {})
+				$.post("block-dropped", {"x": ev.target.attributes["x"].value, "y": ev.target.attributes["y"].value}, function() {})
 
 				var data = ev.dataTransfer.getData("text");
 				ev.target.appendChild(document.getElementById(data));
