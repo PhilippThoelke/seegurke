@@ -22,6 +22,9 @@ jobs:
 
     - name: Build using AppService-Build
       uses: azure/appservice-build@v1
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
       with:
         platform: python
 
