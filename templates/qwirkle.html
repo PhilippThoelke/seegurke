@@ -2,38 +2,11 @@
 	<head>
 		<title>Qwirkle - {{ game.title }}</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='qwirkle.css') }}">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-		<script>
-			function allowDrop(ev) {
-				ev.preventDefault();
-			}
-
-			function drag(ev) {
-				ev.dataTransfer.setData("text", ev.target.id);
-			}
-
-			function drop(ev) {
-				ev.preventDefault();
-				console.log(ev.target.attributes["x"])
-				$.post("block-dropped", {"x": ev.target.attributes["x"].value, "y": ev.target.attributes["y"].value}, function() {})
-
-				var data = ev.dataTransfer.getData("text");
-				ev.target.appendChild(document.getElementById(data));
-			}
-		</script>
+		<script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js" integrity="sha256-yr4fRk/GU1ehYJPAs8P4JlTgu0Hdsp4ZKrx8bDEDC3I=" crossorigin="anonymous"></script>
 	</head>
 
 	<body>
-		<table>
-		 {% for i in range(game.rows()): %}
-		 <tr>
-		 	{% for j in range(game.cols()): %}
-			<td width="{{ game.cell_size }}" height="{{ game.cell_size }}" ondrop="drop(event)" ondragover="allowDrop(event)" x="{{ j }}" y="{{ i }}">{{ game[i,j] }}</td>
-			{% endfor %}
-		 </tr>
-		 {% endfor %}
-		</table>
-
-		<img id="block" src="static/seegurke.jpg" draggable="true" ondragstart="drag(event)" width="{{ game.cell_size }}" height="{{ game.cell_size }}">
+		<canvas id="canvas">
+		<script src="static/qwirkle_drawing.js"></script>
 	</body>
 </html>
