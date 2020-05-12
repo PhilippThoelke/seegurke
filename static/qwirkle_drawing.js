@@ -15,6 +15,7 @@ socket.on("mouse", function(msg) {
 	ctx.beginPath();
 	ctx.arc(msg.x, msg.y, 3, 0, 2 * Math.PI);
 	ctx.fill();
+	ctx.fillText(msg.username, msg.x + 5, msg.y - 5);
 });
 
 function onMouseDown(ev) {
