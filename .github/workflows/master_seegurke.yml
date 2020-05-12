@@ -22,11 +22,13 @@ jobs:
 
     - name: Build using AppService-Build
       uses: azure/appservice-build@v1
+      with:
+        platform: python
+
+    - name: Install additional dependencies
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-      with:
-        platform: python
 
     - name: 'Deploy to Azure Web App'
       uses: azure/webapps-deploy@v1
