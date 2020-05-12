@@ -1,5 +1,5 @@
 from flask import Flask, render_template, session, request, redirect, url_for
-# from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 import secrets
 import json
 import os
@@ -16,7 +16,7 @@ else:
 		json.dump(config, file)
 
 app.secret_key = config['secret']
-# socketio = SocketIO(app)
+socketio = SocketIO(app)
 
 gamerooms = {}
 
@@ -42,18 +42,18 @@ def qwirkle():
 
 	return render_template('start_qwirkle.html')
 
-# @socketio.on('mousePosition')
-# def handle_message(data):
-# 	data['username'] = session['username']
-# 	emit('mouse', data, broadcast=True)
-#
-# @socketio.on('connect')
-# def test_connect():
-# 	emit('connection', {'username': f'{session["username"]}', 'type': 'connected'}, broadcast=True)
-#
-# @socketio.on('disconnect')
-# def test_disconnect():
-# 	emit('connection', {'username': f'{session["username"]}', 'type': 'disconnected'}, broadcast=True)
-#
-# if __name__ == '__main__':
-# 	socketio.run(app)
+@socketio.on('mousePosition')
+def handle_message(data):
+	data['username'] = session['username']
+	emit('mouse', data, broadcast=True)
+
+@socketio.on('connect')
+def test_connect():
+	emit('connection', {'username': f'{session["username"]}', 'type': 'connected'}, broadcast=True)
+
+@socketio.on('disconnect')
+def test_disconnect():
+	emit('connection', {'username': f'{session["username"]}', 'type': 'disconnected'}, broadcast=True)
+
+if __name__ == '__main__':
+	socketio.run(app)
