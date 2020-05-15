@@ -1,10 +1,11 @@
 from flask import Flask, render_template, session, request, redirect, url_for
-# from flask_socketio import SocketIO, send, emit, join_room, leave_room
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 import secrets
 import json
 import os
 import games
 import subprocess
+import glob
 
 app = Flask(__name__)
 
@@ -17,7 +18,7 @@ else:
 		json.dump(config, file)
 
 app.secret_key = config['secret']
-# socketio = SocketIO(app)
+socketio = SocketIO(app)
 
 gamerooms = {}
 
@@ -41,6 +42,22 @@ def pip_list():
 	        errors = ferr.read()
 	return '<h1>Output:</h1><br>' + output.replace('\n', '<br>') + '<br><h1>Errors:</h1><br>' + errors.replace('\n', '<br>')
 
+@app.route('/try')
+def try_():
+	try:
+		from flask_socketio import SocketIO, send, emit, join_room, leave_room
+	except Exception as e:
+		return str(e)
+	return 'It worked'
+
+@app.route('/ls')
+def ls():
+	output = ''
+	for path in glob.glob('*.log'):
+		output += '<h1>' + path + '</h1><br>'
+		output += open(path).read().replace('\n', '<br>')
+	return output
+
 @app.route('/qwirkle', methods=['GET', 'POST'])
 def qwirkle():
 	if request.method == 'POST':
@@ -54,18 +71,18 @@ def qwirkle():
 
 	return render_template('start_qwirkle.html')
 
-# @socketio.on('mousePosition')
-# def handle_message(data):
-# 	data['username'] = session['username']
-# 	emit('mouse', data, broadcast=True)
-#
-# @socketio.on('connect')
-# def test_connect():
-# 	emit('connection', {'username': f'{session["username"]}', 'type': 'connected'}, broadcast=True)
-#
-# @socketio.on('disconnect')
-# def test_disconnect():
-# 	emit('connection', {'username': f'{session["username"]}', 'type': 'disconnected'}, broadcast=True)
-#
-# if __name__ == '__main__':
-# 	socketio.run(app)
+@socketio.on('mousePosition')
+def handle_message(data):
+	data['username'] = session['username']
+	emit('mouse', data, broadcast=True)
+
+@socketio.on('connect')
+def test_connect():
+	emit('connection', {'username': f'{session["username"]}', 'type': 'connected'}, broadcast=True)
+
+@socketio.on('disconnect')
+def test_disconnect():
+	emit('connection', {'username': f'{session["username"]}', 'type': 'disconnected'}, broadcast=True)
+
+if __name__ == '__main__':
+	socketio.run(app)
